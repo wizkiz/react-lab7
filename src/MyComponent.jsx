@@ -9,7 +9,8 @@ export default class MyComponent extends React.Component {
             isLoading: false,
             showEmployees: false,
             age: null,
-            error: ' '
+            error: "Phone numbers can only contain digits and have to be exactly 9 digits long",
+            val: null
         }
     }
 
@@ -38,17 +39,26 @@ export default class MyComponent extends React.Component {
         return pattern.test(number);
     }
 
-    handleSubmit = (event) => {
+    handleOnChange = (event) => {
         event.preventDefault();
-        const data = new FormData(event.target);
-        const name = data.get("name");
-        //console.log(name);
-        //console.log(name.length);
-        //let errors = this.state.error;
+        this.setState({
+            val: event.target.value.toString()
+        }, () => this.validateNumOrEmail());
+    }
+
+    handleAgeChange = (event) => {
+        event.preventDefault();
+        this.setState({
+            age: event.target.value
+        }, () => this.validateNumOrEmail());
+    }
+
+    validateNumOrEmail = () => {
+        const name = this.state.val;
         if (this.state.age < 18) {
             if(!this.validateNumber(name)) {
                 this.setState({
-                    error: "Phone numbers can only contain digits and have to be exactly 9 digits"
+                    error: "Phone numbers can only contain digits and have to be exactly 9 digits long"
                 })
             } else {
                 this.setState({
@@ -65,7 +75,7 @@ export default class MyComponent extends React.Component {
                     error: ""
                 })
             };
-        };  
+        };
     }
 
     render() {
@@ -94,11 +104,11 @@ export default class MyComponent extends React.Component {
         }
 
         const formForm = (
-            <div style={{ border: "2px solid", marginUp: "2px" }}>
-                <form onSubmit={this.handleSubmit}>
+            <div style={{ border: "1px solid"}}>
+                <form onSubmit={(e) => {e.preventDefault()}}>
                     <p><label style={{margin: "1em"}}>
                         Age:
-                        <input type="number" onChange={(event) => this.setState({ age: event.target.value })} />
+                        <input type="number" onChange={this.handleAgeChange} />
                     </label></p>
                     <p><label style={{margin: "1em"}}>
                         {this.state.age < 18 ? "Parent name" : "Name"}:
@@ -106,18 +116,19 @@ export default class MyComponent extends React.Component {
                     </label></p>
                     <p><label style={{margin: "1em"}}>
                         {this.state.age < 18 ? "Parent phone no." : "Email"}:
-                        <input name="name" style={this.state.error.length > 0 ? styleInvalid : styleValid}/>
+                        <input name="name" style={this.state.error.length > 0 ? styleInvalid : styleValid} onChange={this.handleOnChange}/>
                         {this.state.error.length > 0 && 
                         <span style={styleError}>{this.state.error.toString()}</span>}
                     </label></p>
-                    <p><input type="submit" value="Submit" style={{margin: "1em"}}/></p>
+                    <p><input type="submit" value="Submit" style={{margin: "1em"}} disabled={this.state.error.length>0}/></p>
                 </form>
             </div>
         )
 
         const employeesList = this.state.isLoading ? <p>Loading...</p> : (
-            !this.state.showEmployees ? <button onClick={(prevState) => this.setState({ showEmployees: true })} style={{margin: "1em"}}>Show employees</button> :
-                <div style={{margin: "1em"}}>
+            !this.state.showEmployees 
+            ? <button onClick={(prevState) => this.setState({ showEmployees: true })} style={{margin: "1em"}}>Show employees</button> 
+            :   <div style={{margin: "1em"}}>
                     <h1>Employees:</h1>
                     {this.state.employees.map(item => (
                         <ul key={item.id}>
