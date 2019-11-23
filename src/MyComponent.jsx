@@ -56,7 +56,7 @@ export default class MyComponent extends React.Component {
     validateNumOrEmail = () => {
         const name = this.state.val;
         if (this.state.age < 18) {
-            if(!this.validateNumber(name)) {
+            if (!this.validateNumber(name)) {
                 this.setState({
                     error: "Phone numbers can only contain digits and have to be exactly 9 digits long"
                 })
@@ -91,11 +91,13 @@ export default class MyComponent extends React.Component {
         }
 
         const styleValid = {
-            background: "#ddffdd"
+            background: "#ddffdd",
+            marginLeft: "0.5em",
         }
 
         const styleInvalid = {
-            background: "#ffdddd"
+            background: "#ffdddd",
+            marginLeft: "0.5em",
         }
 
         const styleError = {
@@ -104,31 +106,34 @@ export default class MyComponent extends React.Component {
         }
 
         const formForm = (
-            <div style={{ border: "1px solid"}}>
-                <form onSubmit={(e) => {e.preventDefault()}}>
-                    <p><label style={{margin: "1em"}}>
+            <div style={{ border: "1px solid", margin: "1em" }}>
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    this.props.history.push("/success");
+                }}>
+                    <p><label style={{ margin: "1em" }}>
                         Age:
-                        <input type="number" onChange={this.handleAgeChange} />
+                        <input type="number" onChange={this.handleAgeChange} style={{ marginLeft: "0.5em" }} />
                     </label></p>
-                    <p><label style={{margin: "1em"}}>
+                    <p><label style={{ margin: "1em" }}>
                         {this.state.age < 18 ? "Parent name" : "Name"}:
-                        <input />
+                        <input style={{ marginLeft: "0.5em" }} />
                     </label></p>
-                    <p><label style={{margin: "1em"}}>
+                    <p><label style={{ margin: "1em" }}>
                         {this.state.age < 18 ? "Parent phone no." : "Email"}:
-                        <input name="name" style={this.state.error.length > 0 ? styleInvalid : styleValid} onChange={this.handleOnChange}/>
-                        {this.state.error.length > 0 && 
-                        <span style={styleError}>{this.state.error.toString()}</span>}
+                        <input name="name" style={this.state.error.length > 0 ? styleInvalid : styleValid} onChange={this.handleOnChange} />
+                        {this.state.error.length > 0 &&
+                            <span style={styleError}>{this.state.error.toString()}</span>}
                     </label></p>
-                    <p><input type="submit" value="Submit" style={{margin: "1em"}} disabled={this.state.error.length>0}/></p>
+                    <p><input type="submit" value="Submit" style={{ marginLeft: "1em", height: "3em", width: "6em" }} disabled={this.state.error.length > 0} /></p>
                 </form>
             </div>
         )
 
-        const employeesList = this.state.isLoading ? <p>Loading...</p> : (
-            !this.state.showEmployees 
-            ? <button onClick={(prevState) => this.setState({ showEmployees: true })} style={{margin: "1em"}}>Show employees</button> 
-            :   <div style={{margin: "1em"}}>
+        const employeesList = this.state.isLoading ? <p style={{ margin: "1em" }}>Loading...</p> : (
+            !this.state.showEmployees
+                ? <button onClick={(prevState) => this.setState({ showEmployees: true })} style={{ margin: "1em" }}>Show employees</button>
+                : <div style={{ margin: "1em" }}>
                     <h1>Employees:</h1>
                     {this.state.employees.map(item => (
                         <ul key={item.id}>
@@ -140,7 +145,7 @@ export default class MyComponent extends React.Component {
                         </ul>
 
                     ))}
-                    <button onClick={(prevState) => this.setState({ showEmployees: false })} style={{margin: "1em"}}>Hide employees</button>
+                    <button onClick={(prevState) => this.setState({ showEmployees: false })} style={{ margin: "1em" }}>Hide employees</button>
                 </div>
         )
         return (

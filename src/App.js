@@ -1,10 +1,15 @@
 import React from 'react';
-import MyComponent from './MyComponent'
+import { BrowserRouter, Route } from 'react-router-dom';
+import MyComponent from './MyComponent';
+import SuccessComponent from './SuccessComponent';
 
 function App() {
   return (
     <div>
-      <MyComponent/>
+      <BrowserRouter>
+        <Route exact path="/" component={MyComponent} />
+        <Route path="/success" component={SuccessComponent} />
+      </BrowserRouter>
     </div>
   );
 }
